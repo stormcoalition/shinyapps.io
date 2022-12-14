@@ -14,12 +14,14 @@ output$map <- renderLeaflet({
   )
 
   leaflet(geojson) %>%
+    
+    addTiles(attribution = '<a href="https://stormcoalition.github.io/sources.html" target="_blank" rel="noopener noreferrer"><b>DATA SOURCES</b></a>') %>%
+    
     addTiles(group='OSM') %>%
     addProviderTiles(providers$OpenTopoMap, group='Topo', options = providerTileOptions(attribution=" Map data: © OpenStreetMap contributors, SRTM | Map style: © OpenTopoMap (CC-BY-SA) | Oak Ridges Moraine Groundwater Program")) %>%
     addProviderTiles(providers$Stamen.TonerLite, group = "Toner Lite", options = providerTileOptions(attribution=" Map tiles by Stamen Design, CC BY 3.0 — Map data © OpenStreetMap contributors | Oak Ridges Moraine Groundwater Program")) %>%    
 
     addTiles(attribution = '<a href="https://www.stormcoalition.com/" target="_blank" rel="noopener noreferrer"><b>Save The Oak Ridges Moraine</b></a>') %>%
-    addTiles(attribution = '<a href="https://stormcoalition.github.io/sources.html" target="_blank" rel="noopener noreferrer"><b>Sources</b></a>') %>%
     
     addGeoJSON(bua, weight = 3, color = "darkred", stroke = FALSE, fillOpacity = 0.35, group="Built-up areas") %>%
     addGeoJSON(grnblt, weight = 3, color = "green", stroke = FALSE, fillOpacity = 0.35, group="Greenbelt") %>%
@@ -43,13 +45,13 @@ output$map <- renderLeaflet({
                 fillColor = "cyan", 
                 fillOpacity = 0.75,
                 label = ~paste0('Proposed ', current,' redesignation (click me)'),
-                popup = ~paste0('<a href="https://geohub.lio.gov.on.ca/documents/southern-ontario-land-resource-information-system-solris-3-0/about"><b>SOLRIS v3.0</b></a>',' land use:',
+                popup = ~paste0('<b>Existing land use (<a href="https://geohub.lio.gov.on.ca/documents/southern-ontario-land-resource-information-system-solris-3-0/about" target="_blank" rel="noopener noreferrer">SOLRIS v3.0</a>','):</b>',
                                 '<br>Agriculture cover: ', agriculture,
                                 '<br>Forest cover: ', forest,
-                                '<br><br>Layer converage:',
-                                '<br><a href="https://geohub.lio.gov.on.ca/documents/southern-ontario-land-resource-information-system-solris-3-0/about">Natural Heritage: </a>', NHS,
-                                '<br><a href="https://geohub.lio.gov.on.ca/documents/southern-ontario-land-resource-information-system-solris-3-0/about">Wetlands: </a>', wetland,
-                                '<br><em>(click hyperlinks for source reference)</em>'
+                                '<br><br><b>Map layer coverage:</b>',
+                                '<br><a href="https://geohub.lio.gov.on.ca/datasets/lio::natural-heritage-system-area/about/" target="_blank" rel="noopener noreferrer">Natural Heritage: </a>', NHS,
+                                '<br><a href="https://geohub.lio.gov.on.ca/datasets/mnrf::wetlands/about" target="_blank" rel="noopener noreferrer">Wetlands: </a>', wetland,
+                                '<br><em>(click links for source reference)</em>'
                                 ),
                 group = "ORM Land use",
                 highlightOptions = highlightOptions(
