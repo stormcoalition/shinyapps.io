@@ -43,11 +43,13 @@ output$map <- renderLeaflet({
                 fillColor = "cyan", 
                 fillOpacity = 0.75,
                 label = ~paste0('Proposed ', current,' redesignation (click me)'),
-                popup = ~paste0('<b>Current conditions</b>',
+                popup = ~paste0('<a href="https://geohub.lio.gov.on.ca/documents/southern-ontario-land-resource-information-system-solris-3-0/about"><b>SOLRIS v3.0</b></a>',' land use:',
                                 '<br>Agriculture cover: ', agriculture,
                                 '<br>Forest cover: ', forest,
-                                '<br>Natural Heritage: ', NHS,
-                                '<br>Wetlands: ', wetland
+                                '<br><br>Layer converage:',
+                                '<br><a href="https://geohub.lio.gov.on.ca/documents/southern-ontario-land-resource-information-system-solris-3-0/about">Natural Heritage: </a>', NHS,
+                                '<br><a href="https://geohub.lio.gov.on.ca/documents/southern-ontario-land-resource-information-system-solris-3-0/about">Wetlands: </a>', wetland,
+                                '<br><em>(click hyperlinks for source reference)</em>'
                                 ),
                 group = "ORM Land use",
                 highlightOptions = highlightOptions(
