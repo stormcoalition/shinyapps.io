@@ -2,11 +2,14 @@
 output$map <- renderLeaflet({
   geojson <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/Oak_Ridges_Moraine_(ORM)_Land_Use_Designation.geojson")
   nhsa <- readLines("https://raw.githubusercontent.com/stormcoalition/geojson/main/NHSAREA-simplified.geojson") %>% paste(collapse = "\n")
-  grnblt <- readLines("https://raw.githubusercontent.com/stormcoalition/geojson/main/GREENBELT_DESIGNATION-simplified.geojson") %>% paste(collapse = "\n")
+  grnblt <- readLines("https://raw.githubusercontent.com/stormcoalition/geojson/main/GREENBELT_DESIGNATION-simplified-2022.geojson") %>% paste(collapse = "\n")
   bua <- readLines("https://raw.githubusercontent.com/stormcoalition/geojson/main/BUILT_UP_AREA-simplified.geojson") %>% paste(collapse = "\n")
   wetlnds <- readLines("https://raw.githubusercontent.com/stormcoalition/geojson/main/wetlands-simplified.geojson") %>% paste(collapse = "\n")
   
   add.1 <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/Proposed-Greenbelt-modifications.geojson")
+  
+  # gs4_auth(email = "mason.marchildon@gmail.com")
+  loi <- read_sheet('https://docs.google.com/spreadsheets/d/1l0vin4jgMKQgqMeEefEAIsMDQZ614mx0rnN-8C8Auao/edit#gid=0')
   
   pal <- colorFactor(
     c('#7fc97f','#beaed4','#fdc086','#ffff99','#386cb0','#f0027f'),
@@ -27,12 +30,13 @@ output$map <- renderLeaflet({
     addGeoJSON(grnblt, weight = 3, color = "green", stroke = FALSE, fillOpacity = 0.35, group="Greenbelt") %>%
     addGeoJSON(wetlnds, weight = 3, color = "darkgreen", stroke = FALSE, fillOpacity = 0.35, group="Wetlands") %>%
     addGeoJSON(nhsa, weight = 3, color = "blue", stroke = FALSE, fillOpacity = 0.35, group="Natural heritage systems") %>%    
-    
+  
     addPolygons(
       color = "black",
       weight = 2,
       fillColor = ~pal(LAND_USE_DESIGNATION),
-      opacity = .5,
+      opacity = .5, 
+      group="ORM Land use",
       label = ~LAND_USE_DESIGNATION,
       highlightOptions = highlightOptions(
         opacity = 1, fillOpacity =1, weight = 5, sendToBack = FALSE
@@ -59,6 +63,8 @@ output$map <- renderLeaflet({
                 )
     ) %>%
     
+    addMarkers(data=loi,lng=~long,lat=~lat,label = ~description) %>%
+      
     addLegend("topright", pal = pal, values = ~LAND_USE_DESIGNATION,
               title = "Oak Ridges Moraine<br>Land Use Designation",
               opacity = 1

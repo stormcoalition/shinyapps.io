@@ -2,11 +2,13 @@
 library(shiny)
 library(leaflet)
 library(rgdal)
+library(googlesheets4)
 library(dplyr, warn.conflicts = FALSE)
 library(tidygeocoder)
 
 
 source("func/geocoder.R", local=TRUE)
+gs4_deauth()
 
 ui <- bootstrapPage(
   leafletOutput("map", height = "100vh"),
