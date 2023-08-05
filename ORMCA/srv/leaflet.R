@@ -1,22 +1,24 @@
 
 output$map <- renderLeaflet({
-  geojson <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/Oak_Ridges_Moraine_(ORM)_Land_Use_Designation.geojson")
+  ormcp <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/Oak_Ridges_Moraine_(ORM)_Land_Use_Designation.geojson")
   nhsa <- readLines("https://raw.githubusercontent.com/stormcoalition/geojson/main/NHSAREA-simplified.geojson") %>% paste(collapse = "\n")
   grnblt <- readLines("https://raw.githubusercontent.com/stormcoalition/geojson/main/GREENBELT_DESIGNATION-simplified-2022.geojson") %>% paste(collapse = "\n")
   bua <- readLines("https://raw.githubusercontent.com/stormcoalition/geojson/main/BUILT_UP_AREA-simplified.geojson") %>% paste(collapse = "\n")
   wetlnds <- readLines("https://raw.githubusercontent.com/stormcoalition/geojson/main/wetlands-simplified.geojson") %>% paste(collapse = "\n")
+  ridings <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/ridings.geojson")
+
   
   add.1 <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/Proposed-Greenbelt-modifications.geojson")
   
   # gs4_auth(email = "mason.marchildon@gmail.com")
-  loi <- read_sheet('https://docs.google.com/spreadsheets/d/1l0vin4jgMKQgqMeEefEAIsMDQZ614mx0rnN-8C8Auao/edit#gid=0')
+  loi <- read_sheet('https://docs.google.com/spreadsheets/d/1l0vin4jgMKQgqMeEefEAIsMDQZ614mx0rnN-8C8Auao/edit#gid=0', sheet = 'GIS-Coordinates')
   
   pal <- colorFactor(
     c('#7fc97f','#beaed4','#fdc086','#ffff99','#386cb0','#f0027f'),
-    domain = geojson@data$LAND_USE_DESIGNATION
+    domain = ormcp@data$LAND_USE_DESIGNATION
   )
 
-  leaflet(geojson) %>%
+  leaflet(ormcp) %>%
     
     addTiles(attribution = '<a href="https://stormcoalition.github.io/sources.html" target="_blank" rel="noopener noreferrer"><b>DATA SOURCES</b></a>') %>%
     
@@ -42,7 +44,26 @@ output$map <- renderLeaflet({
         opacity = 1, fillOpacity =1, weight = 5, sendToBack = FALSE
       )
     ) %>%
-    
+   
+    addPolygons(
+      data = ridings,
+      color = "darkred",
+      weight = 2,
+      opacity = .35, 
+      group="Provincial representative",
+      label = ~Riding,
+      popup = ~paste0(
+                '<br>Riding: ',Riding,
+                '<br>MPP: ', First_name," ",Last_name,
+                '<br>email: <a href="mailto:',Email,'">',Email,'</a>',
+                '<br>telephone: ', Telephone
+                ),
+      highlightOptions = highlightOptions(
+        opacity = 1, fillOpacity =1, weight = 5, sendToBack = FALSE
+      )
+    ) %>%
+
+
     addPolygons(data=add.1, 
                 weight = 8, 
                 color="red", 
@@ -63,7 +84,7 @@ output$map <- renderLeaflet({
                 )
     ) %>%
     
-    addMarkers(data=loi,lng=~long,lat=~lat,label = ~description) %>%
+    addMarkers(data=loi,lng=~long,lat=~lat, label = ~description, popup = ~description_long) %>%
       
     addLegend("topright", pal = pal, values = ~LAND_USE_DESIGNATION,
               title = "Oak Ridges Moraine<br>Land Use Designation",
@@ -72,9 +93,9 @@ output$map <- renderLeaflet({
     setView(lng = -79.0, lat = 44.1, zoom = 10) %>%
     addLayersControl (
       baseGroups = c("OSM", "Topo", "Toner Lite"),
-      overlayGroups = c("ORM Land use", "Greenbelt", "Built-up areas", "Wetlands", "Natural heritage systems"),
+      overlayGroups = c("ORM Land use", "Greenbelt", "Built-up areas", "Wetlands", "Natural heritage systems","Provincial representative"),
       options = layersControlOptions(collapsed = FALSE) #position = "bottomleft")
-    ) %>% hideGroup(c("Greenbelt", "Built-up areas", "Wetlands","Natural heritage systems"))
+    ) %>% hideGroup(c("Greenbelt", "Built-up areas", "Wetlands","Natural heritage systems","Provincial representative"))
 })
 
 
@@ -84,5 +105,5 @@ observe({
   if (is.null(event)) return()
   lat <- round(event$lat, 4)
   lng <- round(event$lng, 4)
-  leafletProxy("map") %>% addPopups(event$lng,event$lat,paste0(lat, ', ', lng))
+  leafletProxy("map") %>% addPopups(event$lng,event$lat,paste0(lat, ',', lng))
 })
