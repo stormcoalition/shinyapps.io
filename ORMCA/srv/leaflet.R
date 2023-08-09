@@ -6,6 +6,7 @@ output$map <- renderLeaflet({
   bua <- readLines("https://raw.githubusercontent.com/stormcoalition/geojson/main/BUILT_UP_AREA-simplified.geojson") %>% paste(collapse = "\n")
   wetlnds <- readLines("https://raw.githubusercontent.com/stormcoalition/geojson/main/wetlands-simplified.geojson") %>% paste(collapse = "\n")
   ridings <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/ridings.geojson")
+  CAs <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/CONS_AUTH_ADMIN_AREA_STORM.geojson")
 
   
   add.1 <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/Proposed-Greenbelt-modifications.geojson")
@@ -44,13 +45,25 @@ output$map <- renderLeaflet({
         opacity = 1, fillOpacity =1, weight = 5, sendToBack = FALSE
       )
     ) %>%
-   
+    
+    addPolygons(
+      data = CAs,
+      color = "darkgreen",
+      weight = 2,
+      opacity = .5, 
+      group="Conservation Authorities",
+      label = ~LEGAL_NAME,
+      highlightOptions = highlightOptions(
+        opacity = 1, fillOpacity =1, weight = 5, sendToBack = FALSE
+      )
+    ) %>%
+    
     addPolygons(
       data = ridings,
       color = "darkred",
       weight = 2,
       opacity = .35, 
-      group="Provincial representative",
+      group="Member of Provincial Parliament (MPP)",
       label = ~Riding,
       popup = ~paste0(
                 '<br>Riding: ',Riding,
@@ -93,9 +106,9 @@ output$map <- renderLeaflet({
     setView(lng = -79.0, lat = 44.1, zoom = 10) %>%
     addLayersControl (
       baseGroups = c("OSM", "Topo", "Toner Lite"),
-      overlayGroups = c("ORM Land use", "Greenbelt", "Built-up areas", "Wetlands", "Natural heritage systems","Provincial representative"),
+      overlayGroups = c("ORM Land use", "Greenbelt", "Built-up areas", "Wetlands", "Natural heritage systems","Conservation Authorities","Member of Provincial Parliament (MPP)"),
       options = layersControlOptions(collapsed = FALSE) #position = "bottomleft")
-    ) %>% hideGroup(c("Greenbelt", "Built-up areas", "Wetlands","Natural heritage systems","Provincial representative"))
+    ) %>% hideGroup(c("Greenbelt", "Built-up areas", "Wetlands","Natural heritage systems","Conservation Authorities","Member of Provincial Parliament (MPP)"))
 })
 
 
