@@ -7,16 +7,21 @@ output$map <- renderLeaflet({
   wetlnds <- readLines("https://raw.githubusercontent.com/stormcoalition/geojson/main/wetlands-simplified.geojson") %>% paste(collapse = "\n")
   ridings <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/ridings.geojson")
   CAs <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/CONS_AUTH_ADMIN_AREA_STORM.geojson")
-
+  pits <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/AGGSITE_AUTHORIZED_STORM.geojson")
   
   add.1 <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/Proposed-Greenbelt-modifications.geojson")
   
   # gs4_auth(email = "mason.marchildon@gmail.com")
   loi <- read_sheet('https://docs.google.com/spreadsheets/d/1l0vin4jgMKQgqMeEefEAIsMDQZ614mx0rnN-8C8Auao/edit#gid=0', sheet = 'GIS-Coordinates')
   
-  pal <- colorFactor(
+  ormcpPal <- colorFactor(
     c('#7fc97f','#beaed4','#fdc086','#ffff99','#386cb0','#f0027f'),
     domain = ormcp@data$LAND_USE_DESIGNATION
+  )
+  
+  pitsPal <- colorFactor(
+    c('#7fc97f','#f0027f','#beaed4','grey40'),
+    domain = pits@data$STATUS
   )
 
   leaflet(ormcp) %>%
@@ -37,7 +42,7 @@ output$map <- renderLeaflet({
     addPolygons(
       color = "black",
       weight = 2,
-      fillColor = ~pal(LAND_USE_DESIGNATION),
+      fillColor = ~ormcpPal(LAND_USE_DESIGNATION),
       opacity = .5, 
       group="ORM Land use",
       label = ~LAND_USE_DESIGNATION,
@@ -59,6 +64,25 @@ output$map <- renderLeaflet({
     ) %>%
     
     addPolygons(
+      data = pits,
+      fillColor = ~pitsPal(STATUS), #"grey40",
+      fillOpacity = 1,
+      weight = 2,
+      group="Pits and Quarries",
+      label = ~CL_NAME,
+      popup = ~paste0(
+        '<b>Name: ', CL_NAME,"</b>",
+        '<br>Status: ', STATUS,
+        '<br>Type: ', AUTH_TYPE,
+        '<br>Depth: ', WATER_STAT,
+        '<br>Limit: ', MAX_TN_LMT, "t"
+      ),
+      highlightOptions = highlightOptions(
+        opacity = 1, fillOpacity =1, weight = 5, sendToBack = FALSE
+      )
+    ) %>%
+    
+    addPolygons(
       data = ridings,
       color = "darkred",
       weight = 2,
@@ -66,7 +90,7 @@ output$map <- renderLeaflet({
       group="Member of Provincial Parliament (MPP)",
       label = ~Riding,
       popup = ~paste0(
-                '<br>Riding: ',Riding,
+                '<b>Riding: ', Riding,"</b>",
                 '<br>MPP: ', First_name," ",Last_name,
                 '<br>email: <a href="mailto:',Email,'">',Email,'</a>',
                 '<br>telephone: ', Telephone
@@ -99,16 +123,29 @@ output$map <- renderLeaflet({
     
     addMarkers(data=loi,lng=~long,lat=~lat, label = ~description, popup = ~description_long) %>%
       
-    addLegend("topright", pal = pal, values = ~LAND_USE_DESIGNATION,
+    addLegend("topright", pal = ormcpPal, values = ~LAND_USE_DESIGNATION,
               title = "Oak Ridges Moraine<br>Land Use Designation",
               opacity = 1
     ) %>%
     setView(lng = -79.0, lat = 44.1, zoom = 10) %>%
     addLayersControl (
       baseGroups = c("OSM", "Topo", "Toner Lite"),
-      overlayGroups = c("ORM Land use", "Greenbelt", "Built-up areas", "Wetlands", "Natural heritage systems","Conservation Authorities","Member of Provincial Parliament (MPP)"),
+      overlayGroups = c("ORM Land use", 
+                        "Greenbelt", 
+                        "Built-up areas", 
+                        "Wetlands", 
+                        "Natural heritage systems",
+                        "Pits and Quarries",
+                        "Conservation Authorities",
+                        "Member of Provincial Parliament (MPP)"),
       options = layersControlOptions(collapsed = FALSE) #position = "bottomleft")
-    ) %>% hideGroup(c("Greenbelt", "Built-up areas", "Wetlands","Natural heritage systems","Conservation Authorities","Member of Provincial Parliament (MPP)"))
+    ) %>% hideGroup(c("Greenbelt", 
+                      "Built-up areas", 
+                      "Wetlands",
+                      "Natural heritage systems",
+                      "Pits and Quarries",
+                      "Conservation Authorities",
+                      "Member of Provincial Parliament (MPP)"))
 })
 
 
