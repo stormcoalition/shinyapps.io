@@ -2,6 +2,7 @@
 library(shiny)
 library(leaflet)
 library(rgdal)
+library(geojsonio)
 library(googlesheets4)
 library(dplyr, warn.conflicts = FALSE)
 library(tidygeocoder)

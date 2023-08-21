@@ -5,9 +5,16 @@ output$map <- renderLeaflet({
   grnblt <- readLines("https://raw.githubusercontent.com/stormcoalition/geojson/main/GREENBELT_DESIGNATION-simplified-2022.geojson") %>% paste(collapse = "\n")
   bua <- readLines("https://raw.githubusercontent.com/stormcoalition/geojson/main/BUILT_UP_AREA-simplified.geojson") %>% paste(collapse = "\n")
   wetlnds <- readLines("https://raw.githubusercontent.com/stormcoalition/geojson/main/wetlands-simplified.geojson") %>% paste(collapse = "\n")
-  ridings <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/ridings.geojson")
+  ridings <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/ELECTORAL_DISTRICT_STORM.geojson")
   CAs <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/CONS_AUTH_ADMIN_AREA_STORM.geojson")
+  # munis <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/MUNIC_BND_ALL_STORM.geojson")
   pits <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/AGGSITE_AUTHORIZED_STORM.geojson")
+  
+  munis <- geojson_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/MUNIC_BND_ALL_STORM.geojson", what = "sp")
+  neword <- order(-munis@data$area)  # set order
+  munis@polygons <- munis@polygons[neword]
+  munis@plotOrder <- neword
+  munis@data <- munis@data %>% arrange(-area)
   
   add.1 <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/Proposed-Greenbelt-modifications.geojson")
   
@@ -58,6 +65,19 @@ output$map <- renderLeaflet({
       opacity = .5, 
       group="Conservation Authorities",
       label = ~LEGAL_NAME,
+      highlightOptions = highlightOptions(
+        opacity = 1, fillOpacity =1, weight = 5, sendToBack = FALSE
+      )
+    ) %>%
+    
+    addPolygons(
+      data = munis,
+      color = "darkorange",
+      weight = 2,
+      opacity = .5, 
+      fillOpacity = .4,
+      group="Municipalities",
+      label = ~MUN_NAME,
       highlightOptions = highlightOptions(
         opacity = 1, fillOpacity =1, weight = 5, sendToBack = FALSE
       )
@@ -136,6 +156,7 @@ output$map <- renderLeaflet({
                         "Wetlands", 
                         "Natural heritage systems",
                         "Pits and Quarries",
+                        "Municipalities",
                         "Conservation Authorities",
                         "Member of Provincial Parliament (MPP)"),
       options = layersControlOptions(collapsed = FALSE) #position = "bottomleft")
@@ -144,6 +165,7 @@ output$map <- renderLeaflet({
                       "Wetlands",
                       "Natural heritage systems",
                       "Pits and Quarries",
+                      "Municipalities",
                       "Conservation Authorities",
                       "Member of Provincial Parliament (MPP)"))
 })
