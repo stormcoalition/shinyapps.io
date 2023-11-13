@@ -16,7 +16,7 @@ output$map <- renderLeaflet({
   munis@plotOrder <- neword
   munis@data <- munis@data %>% arrange(-area)
   
-  # add.1 <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/Proposed-Greenbelt-modifications.geojson")
+  add.1 <- readOGR("https://raw.githubusercontent.com/stormcoalition/geojson/main/Proposed-Greenbelt-modifications.geojson")
   
   # gs4_auth(email = "mason.marchildon@gmail.com")
   loi <- read_sheet('https://docs.google.com/spreadsheets/d/1l0vin4jgMKQgqMeEefEAIsMDQZ614mx0rnN-8C8Auao/edit#gid=0', sheet = 'GIS-Coordinates')
@@ -36,9 +36,10 @@ output$map <- renderLeaflet({
     addTiles(attribution = '<a href="https://stormcoalition.github.io/sources.html" target="_blank" rel="noopener noreferrer"><b>DATA SOURCES</b></a>') %>%
     
     addTiles(group='OSM') %>%
-    addProviderTiles(providers$OpenTopoMap, group='Topo', options = providerTileOptions(attribution=" Map data: © OpenStreetMap contributors, SRTM | Map style: © OpenTopoMap (CC-BY-SA) | Oak Ridges Moraine Groundwater Program")) %>%
-    addProviderTiles(providers$Stamen.TonerLite, group = "Toner Lite", options = providerTileOptions(attribution=" Map tiles by Stamen Design, CC BY 3.0 — Map data © OpenStreetMap contributors | Oak Ridges Moraine Groundwater Program")) %>%    
-
+    addProviderTiles(providers$OpenTopoMap, group='Topo', options = providerTileOptions(attribution=" Map data: © OpenStreetMap contributors, SRTM | Map style: © OpenTopoMap (CC-BY-SA) | Save The Oak Ridges Moraine")) %>%
+    # addProviderTiles(providers$Stamen.TonerLite, group = "Toner Lite", options = providerTileOptions(attribution=" Map tiles by Stamen Design, CC BY 3.0 — Map data © OpenStreetMap contributors | Save The Oak Ridges Moraine")) %>%    
+    addTiles("http://99.249.44.21:8081/basemap/{z}/{x}/{y}", group = "basemap", options = providerTileOptions(attribution=" © Save The Oak Ridges Moraine")) %>%
+    
     addTiles(attribution = '<a href="https://www.stormcoalition.com/" target="_blank" rel="noopener noreferrer"><b>Save The Oak Ridges Moraine</b></a>') %>%
     
     addGeoJSON(bua, weight = 3, color = "darkred", stroke = FALSE, fillOpacity = 0.35, group="Built-up areas") %>%
@@ -121,25 +122,25 @@ output$map <- renderLeaflet({
     ) %>%
 
 
-    # addPolygons(data=add.1, 
-    #             weight = 8, 
-    #             color="red", 
-    #             fillColor = "cyan", 
-    #             fillOpacity = 0.75,
-    #             label = ~paste0('Proposed ', current,' redesignation (click me)'),
-    #             popup = ~paste0('<b>Existing land use (<a href="https://geohub.lio.gov.on.ca/documents/southern-ontario-land-resource-information-system-solris-3-0/about" target="_blank" rel="noopener noreferrer">SOLRIS v3.0</a>','):</b>',
-    #                             '<br>Agriculture cover: ', agriculture,
-    #                             '<br>Forest cover: ', forest,
-    #                             '<br><br><b>Map layer coverage:</b>',
-    #                             '<br><a href="https://geohub.lio.gov.on.ca/datasets/lio::natural-heritage-system-area/about/" target="_blank" rel="noopener noreferrer">Natural Heritage: </a>', NHS,
-    #                             '<br><a href="https://geohub.lio.gov.on.ca/datasets/mnrf::wetlands/about" target="_blank" rel="noopener noreferrer">Wetlands: </a>', wetland,
-    #                             '<br><em>(click links for source reference)</em>'
-    #                             ),
-    #             group = "ORM Land use",
-    #             highlightOptions = highlightOptions(
-    #               opacity = 1, fillOpacity =1, weight = 5, sendToBack = FALSE
-    #             )
-    # ) %>%
+    addPolygons(data=add.1,
+                weight = 8,
+                color="red",
+                fillColor = "cyan",
+                fillOpacity = 0.75,
+                label = ~paste0('Proposed ', current,' redesignation (click me)'),
+                popup = ~paste0('<b>Existing land use (<a href="https://geohub.lio.gov.on.ca/documents/southern-ontario-land-resource-information-system-solris-3-0/about" target="_blank" rel="noopener noreferrer">SOLRIS v3.0</a>','):</b>',
+                                '<br>Agriculture cover: ', agriculture,
+                                '<br>Forest cover: ', forest,
+                                '<br><br><b>Map layer coverage:</b>',
+                                '<br><a href="https://geohub.lio.gov.on.ca/datasets/lio::natural-heritage-system-area/about/" target="_blank" rel="noopener noreferrer">Natural Heritage: </a>', NHS,
+                                '<br><a href="https://geohub.lio.gov.on.ca/datasets/mnrf::wetlands/about" target="_blank" rel="noopener noreferrer">Wetlands: </a>', wetland,
+                                '<br><em>(click links for source reference)</em>'
+                                ),
+                group = "ORM Land use",
+                highlightOptions = highlightOptions(
+                  opacity = 1, fillOpacity =1, weight = 5, sendToBack = FALSE
+                )
+    ) %>%
     
     addMarkers(data=loi,lng=~long,lat=~lat, label = ~description, popup = ~description_long) %>%
       
@@ -149,7 +150,7 @@ output$map <- renderLeaflet({
     ) %>%
     setView(lng = -79.0, lat = 44.1, zoom = 10) %>%
     addLayersControl (
-      baseGroups = c("OSM", "Topo", "Toner Lite"),
+      baseGroups = c("OSM", "Topo", "basemap"), # "Toner Lite"),
       overlayGroups = c("ORM Land use", 
                         "Greenbelt", 
                         "Built-up areas", 
