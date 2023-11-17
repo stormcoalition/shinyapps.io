@@ -45,3 +45,4 @@ old/
 orig/
 areasofconcern/
 openlayers/
+*.qmd
