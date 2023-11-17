@@ -10,7 +10,7 @@ library(tidygeocoder)
 
 
 source("func/geocoder.R", local=TRUE)
-gs4_deauth()
+# gs4_deauth()
 
 ui <- bootstrapPage(
   leafletOutput("map", height = "100vh"),
