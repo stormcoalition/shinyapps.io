@@ -15,7 +15,7 @@ output$map <- renderLeaflet({
     
     # addProviderTiles(providers$OpenTopoMap, group='Topo', options = providerTileOptions(attribution=" Map data: © OpenStreetMap contributors, SRTM | Map style: © OpenTopoMap (CC-BY-SA) | Save The Oak Ridges Moraine")) %>%
     # # addProviderTiles(providers$Stamen.TonerLite, group = "Toner Lite", options = providerTileOptions(attribution=" Map tiles by Stamen Design, CC BY 3.0 — Map data © OpenStreetMap contributors | Save The Oak Ridges Moraine")) %>%    
-    addTiles("http://99.249.44.21:8081/basemap/{z}/{x}/{y}", group = "basemap", options = providerTileOptions(attribution=" © Save The Oak Ridges Moraine")) %>%
+    addTiles("http://99.249.44.21:8080/basemap/{z}/{x}/{y}", group = "basemap", options = providerTileOptions(attribution=" © Save The Oak Ridges Moraine")) %>%
 
     
     addGeoJSON(orm, weight = 3, color='black', fillColor = "transparent", dashArray = '12,9', fillOpacity = 0.35) %>%
@@ -52,7 +52,18 @@ observe({
   click <- input$map_shape_click
   if(is.null(click)) {
     output$shape.info <- renderUI(shiny::includeMarkdown("md/blank.md"))
-    leafletProxy("map") %>% addPopups(event$lng,event$lat,paste0(lat, ',', lng, '<br><a href="mailto:test@example.com?subject=MORAINE WATCH [',lat,',',lng,']:">Send Watch</a>'))
+    leafletProxy("map") %>% 
+      addPopups(event$lng,event$lat,paste0(lat, ',', lng, '<br>',
+                                           '<a href="mailto:test@example.com?subject=MORAINE WATCH [',lat,',',lng,']',
+                                           '&body=What is the issue that you are concerned about?%0D%0A%0D%0A%0D%0A%0D%0A',
+                                           'Where? (so we know where the issue is):%0D%0A',
+                                           '  Region, Municipality, Town:%0D%0A',
+                                           '  Road Address/Major Intersection (if known):%0D%0A%0D%0A',
+                                           'Who is involved in this issue?:%0D%0A%0D%0A%0D%0A%0D%0A',
+                                           'Why are you concerned?:%0D%0A%0D%0A%0D%0A%0D%0A',
+                                           'When? (so we have an idea of how long has the issue been going on):%0D%0A%0D%0A%0D%0A%0D%0A',
+                                           'Additional Comments/Details (please attach photos if possible):%0D%0A%0D%0A"',
+                                           '>Submit Watch</a>'))
   } else {
     idx <- which(aoc$id == click$id)
     z <- aoc$zoom[[idx]]
@@ -69,7 +80,18 @@ observe({
     leafletProxy("map") %>%
       setView(lng = click$lng, lat = click$lat, zoom = 14)
 
-    leafletProxy("map") %>% addPopups(event$lng,event$lat,paste0(aoc$Name[[idx]],'<br><a href="mailto:test@example.com?subject=MORAINE WATCH [',lat,',',lng,']:">Send Watch</a>'))
+    leafletProxy("map") %>% 
+      addPopups(event$lng,event$lat,paste0(aoc$Name[[idx]], '<br>',
+                 '<a href="mailto:test@example.com?subject=MORAINE WATCH [',lat,',',lng,']',
+                 '&body=What is the issue that you are concerned about?%0D%0A%0D%0A%0D%0A%0D%0A',
+                 'Where? (so we know where the issue is):%0D%0A',
+                 '  Region, Municipality, Town:%0D%0A',
+                 '  Road Address/Major Intersection (if known):%0D%0A%0D%0A',
+                 'Who is involved in this issue?:%0D%0A%0D%0A%0D%0A%0D%0A',
+                 'Why are you concerned?:%0D%0A%0D%0A%0D%0A%0D%0A',
+                 'When? (so we have an idea of how long has the issue been going on):%0D%0A%0D%0A%0D%0A%0D%0A',
+                 'Additional Comments/Details (please attach photos if possible):%0D%0A%0D%0A"',
+                 '>Submit Watch</a>'))
   }
 })
 
