@@ -1,10 +1,10 @@
 
 
-aoc <<- st_read("https://raw.githubusercontent.com/stormcoalition/shinyapps.io/main/MoraineWatch/json/aoc1.geojson")
+aoc <<- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/moraine-watch-aoc.geojson")
 
 
 output$map <- renderLeaflet({
-
+  hide('panl')
   leaflet(aoc) %>%
 
     addTiles(attribution = '<a href="https://stormcoalition.github.io/sources.html" target="_blank" rel="noopener noreferrer"><b>METADATA</b></a> © <a href="https://www.stormcoalition.com/" target="_blank" rel="noopener noreferrer"><b>Save The Oak Ridges Moraine</b></a>') %>%
@@ -20,15 +20,11 @@ output$map <- renderLeaflet({
       # fillColor = ~ormcpPal(LAND_USE_DESIGNATION),
       opacity = .5, 
       # group="ORM Land use",
-      label = ~Name,
+      label = ~name,
       highlightOptions = highlightOptions(
         opacity = 1, fillOpacity = 1, weight = 5, sendToBack = FALSE
       )
     ) %>%
-        
-    # addLayersControl(
-    #   baseGroups = c("OSM", "basemap")
-    # ) %>%
     
     setView(lng = -79.0, lat = 44.1, zoom = 10)
 })
@@ -44,45 +40,48 @@ mwpopup <- function(lat,lng) {
          'Why are you concerned?:%0D%0A%0D%0A%0D%0A%0D%0A',
          'When? (so we have an idea of how long has the issue been going on):%0D%0A%0D%0A%0D%0A%0D%0A',
          'Additional Comments/Details (please attach photos if possible):%0D%0A%0D%0A"',
-         '>Submit Watch</a>')
+         '><b>Submit Watch</b></a>')
 }
 
-data <- reactiveValues(clickedMarker=NULL)
+clk <- reactiveValues(clickedShape=NULL)
 
-observeEvent(input$map_marker_click,
-             {data$clickedMarker <- input$map_marker_click})
+observeEvent(input$map_shape_click, { clk$clickedShape <- input$map_shape_click })
 
-observeEvent(input$map_click,
-             {data$clickedMarker <- NULL})
-
-observe({
+observeEvent(input$map_click, {
   leafletProxy("map") %>% clearPopups()
   event <- input$map_click
   if (is.null(event)) return()
   lat <- round(event$lat, 4)
   lng <- round(event$lng, 4)
-  
-  click <- data$clickedMarker # input$map_shape_click
-  print(click)
-  if(is.null(click)) {
-    output$shape.info <- renderUI(shiny::includeMarkdown("md/blank.md"))
-    leafletProxy("map") %>% 
-      addPopups(event$lng,event$lat,paste0(lat, ',', lng, mwpopup(lat, lng)))
-  } else {
+
+  if (!is.null(clk$clickedShape)) {
+    click <- clk$clickedShape
     idx <- which(aoc$id == click$id)
     z <- aoc$zoom[[idx]]
+    i <- strtoi(aoc$id[[idx]])
     
-    print(idx)
-    if (idx[1]==1) {
+    show('panl')
+    if (i==0) {
       output$shape.info <- renderUI(shiny::includeMarkdown("md/2023/Hwy400Expansion.md"))
-    } else if (idx[1]==2) {
+    } else if (i==1) {
       output$shape.info <- renderUI(shiny::includeMarkdown("md/2023/MaryLake.md"))
-    } else {
+    } else if (i==2 | i==3) {
       output$shape.info <- renderUI(shiny::includeMarkdown("md/2023/King-Bathurst.md"))
+    } else {
+      hide('panl')
+      output$shape.info <- renderUI(shiny::includeMarkdown("md/blank.md"))
     }
     
     leafletProxy("map") %>%
       setView(lng = click$lng, lat = click$lat, zoom = 14) %>%
-      addPopups(event$lng,event$lat,paste0(aoc$Name[[idx]], mwpopup(lat,lng)))
+      addPopups(event$lng,event$lat,paste0('<b>',aoc$name[[idx]],'</b>', 
+                                           "<br>Source: ", aoc$source[[idx]], '<a href="', aoc$link[[idx]], '" target="_blank" rel="noopener noreferrer"><i> read more...</i></a>',
+                                           "<br>Date submitted: ", aoc$date_recorded[[idx]]))
+  } else {
+    hide('panl')
+    output$shape.info <- renderUI(shiny::includeMarkdown("md/blank.md"))
+    leafletProxy("map") %>% 
+      addPopups(event$lng,event$lat,paste0(lat, ',', lng, mwpopup(lat, lng)))
   }
+  clk$clickedShape <- NULL
 })

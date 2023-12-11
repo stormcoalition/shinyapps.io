@@ -1,5 +1,6 @@
 
 library(shiny)
+library(shinyjs)
 library(shinydashboard)
 library(leaflet)
 library(dplyr, warn.conflicts = FALSE)
@@ -13,6 +14,7 @@ source("func/geocoder.R", local=TRUE)
 # gs4_deauth()
 
 ui <- bootstrapPage(
+  useShinyjs(),
   leafletOutput("map", height = "100vh"),
   absolutePanel(
     id = "panl", class = "panel panel-default", fixed = TRUE,
