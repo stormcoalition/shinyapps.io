@@ -47,6 +47,13 @@ mwpopup <- function(lat,lng) {
          '>Submit Watch</a>')
 }
 
+data <- reactiveValues(clickedMarker=NULL)
+
+observeEvent(input$map_marker_click,
+             {data$clickedMarker <- input$map_marker_click})
+
+observeEvent(input$map_click,
+             {data$clickedMarker <- NULL})
 
 observe({
   leafletProxy("map") %>% clearPopups()
@@ -55,7 +62,8 @@ observe({
   lat <- round(event$lat, 4)
   lng <- round(event$lng, 4)
   
-  click <- input$map_shape_click
+  click <- data$clickedMarker # input$map_shape_click
+  print(click)
   if(is.null(click)) {
     output$shape.info <- renderUI(shiny::includeMarkdown("md/blank.md"))
     leafletProxy("map") %>% 
@@ -74,9 +82,7 @@ observe({
     }
     
     leafletProxy("map") %>%
-      setView(lng = click$lng, lat = click$lat, zoom = 14)
-    
-    leafletProxy("map") %>% 
+      setView(lng = click$lng, lat = click$lat, zoom = 14) %>%
       addPopups(event$lng,event$lat,paste0(aoc$Name[[idx]], mwpopup(lat,lng)))
   }
 })
