@@ -12,6 +12,21 @@ output$map <- renderLeaflet({
     addTiles() %>%
     addTiles("http://99.249.44.21:8080/ORMbasemap/{z}/{x}/{y}", options = providerTileOptions(attribution=" © Save The Oak Ridges Moraine")) %>%
     
+    addMouseCoordinates() %>%
+    
+    addMeasure(
+      position = "topleft",
+      primaryLengthUnit = "meters",
+      primaryAreaUnit = "hectares",
+      secondaryAreaUnit = "acres",
+      activeColor = "#3D535D",
+      completedColor = "#7D4479"
+    ) %>%
+    
+    addEasyButton(easyButton(
+      icon="fa-crosshairs", title="Locate Me",
+      onClick=JS("function(btn, map){ map.locate({setView: true}); }"))) %>%
+    
     addPolygons(
       data = aoc,
       layerId = ~id,
@@ -26,7 +41,8 @@ output$map <- renderLeaflet({
       )
     ) %>%
     
-    setView(lng = -79.0, lat = 44.1, zoom = 10)
+    setView(lng = -79.0, lat = 44.1, zoom = 10) %>%
+    addLogo("logo-transp.png", src= "remote", width = 100)
 })
 
 
