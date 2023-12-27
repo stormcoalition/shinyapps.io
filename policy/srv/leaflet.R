@@ -77,7 +77,8 @@ output$map <- renderLeaflet({
       )
     ) %>%    
     
-    setView(lng = -79.0, lat = 44.1, zoom = 8) # %>%
+    setView(lng = -79.0, lat = 44.1, zoom = 8) %>%
+    addLogo("logoGBF_transp.png", src= "remote", width = 234) # %>%
 
     # addLayersControl(
     #   baseGroups = c("Municipalities", "Conservation Authorities", "Member of Provincial Parliament (MPP)"),
