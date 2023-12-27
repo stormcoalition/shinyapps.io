@@ -54,7 +54,9 @@ output$map <- renderLeaflet({
       overlayGroups = "Show Land use Designation",
       position = 'bottomright',
       options = layersControlOptions(collapsed = FALSE)
-    )
+    ) %>%
+    
+    addLogo("logoGBF_transp.png", src= "remote", width = 234)
 })
 
 
