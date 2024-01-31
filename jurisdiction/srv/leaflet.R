@@ -86,5 +86,6 @@ output$map <- renderLeaflet({
     ) %>% 
     hideGroup(c("Conservation Authorities", "Member of Provincial Parliament (MPP)")) %>%
     
-    addLogo("logoGBF_transp.png", src= "remote", width = 234)
+    addLogo("logo-transp.png", src= "remote", width = 127)
+  # addLogo("logoGBF_transp.png", src= "remote", width = 234)
 })

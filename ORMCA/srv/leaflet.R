@@ -56,7 +56,8 @@ output$map <- renderLeaflet({
       options = layersControlOptions(collapsed = FALSE)
     ) %>%
     
-    addLogo("logoGBF_transp.png", src= "remote", width = 234)
+    addLogo("logo-transp.png", src= "remote", width = 127)
+  # addLogo("logoGBF_transp.png", src= "remote", width = 234)
 })
 
 
