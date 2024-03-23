@@ -7,6 +7,7 @@ library(leafem)
 library(dplyr, warn.conflicts = FALSE)
 library(sf)
 library(geojsonio)
+library(markdown)
 # library(googlesheets4)
 # library(tidygeocoder)
 
