@@ -10,14 +10,12 @@ output$map <- renderLeaflet({
 
   leaflet(ormcp) %>%
     
-    addTiles(attribution = '<a href="https://stormcoalition.github.io/sources.html" target="_blank" rel="noopener noreferrer"><b>METADATA</b></a> © <a href="https://www.stormcoalition.com/" target="_blank" rel="noopener noreferrer"><b>Save The Oak Ridges Moraine</b></a>') %>%
+    addTiles(attribution = '<a href="https://stormcoalition.github.io" target="_blank" rel="noopener noreferrer"><b>STORM maps</b></a> | <a href="https://stormcoalition.github.io/sources.html" target="_blank" rel="noopener noreferrer"><b>Source Data</b></a> © <a href="https://www.stormcoalition.com/" target="_blank" rel="noopener noreferrer"><b>Save The Oak Ridges Moraine</b></a>') %>%
     
     addTiles() %>%
-    # addProviderTiles(providers$OpenTopoMap, group='Topo', options = providerTileOptions(attribution=" Map data: © OpenStreetMap contributors, SRTM | Map style: © OpenTopoMap (CC-BY-SA) | Save The Oak Ridges Moraine")) %>%
-    # addProviderTiles(providers$Stamen.TonerLite, group = "Toner Lite", options = providerTileOptions(attribution=" Map tiles by Stamen Design, CC BY 3.0 — Map data © OpenStreetMap contributors | Save The Oak Ridges Moraine")) %>%    
-    addTiles("http://99.249.44.21:8080/ORMbasemap/{z}/{x}/{y}", options = providerTileOptions(attribution=" © Save The Oak Ridges Moraine")) %>%
+    addTiles("https://tile.oakridgeswater.ca/ORMbasemap/{z}/{x}/{y}", options = providerTileOptions(attribution=" © Save The Oak Ridges Moraine")) %>%
     
-    addMouseCoordinates() %>%
+    # addMouseCoordinates() %>%
     
     addMeasure(
       position = "topleft",
@@ -37,7 +35,7 @@ output$map <- renderLeaflet({
       weight = 2,
       fillColor = ~ormcpPal(LAND_USE_DESIGNATION),
       opacity = .5, 
-      group="Show Land use Designation",
+      group="Show ORMCP Land use Designation",
       label = ~LAND_USE_DESIGNATION,
       popup = ~paste0(
         '<b>Land Use Designation: ', LAND_USE_DESIGNATION,"</b>",
@@ -51,13 +49,13 @@ output$map <- renderLeaflet({
     setView(lng = -79.0, lat = 44.1, zoom = 10) %>%
     addLayersControl(
       # baseGroups = c("OSM", "basemap"),
-      overlayGroups = "Show Land use Designation",
+      overlayGroups = "Show ORMCP Land use Designation",
       position = 'bottomright',
       options = layersControlOptions(collapsed = FALSE)
     ) %>%
     
     addLogo("logo-transp.png", src= "remote", width = 127)
-  # addLogo("logoGBF_transp.png", src= "remote", width = 234)
+    # addLogo("logoGBF_transp.png", src= "remote", width = 234)
 })
 
 
@@ -74,7 +72,7 @@ observe({
 observe({
   map <- leafletProxy("map") %>% clearControls()
   if (!is.null(input$map_groups) ) {
-    if (input$map_groups == 'Show Land use Designation') {
+    if (input$map_groups == 'Show ORMCP Land use Designation') {
       map <- map %>%
         addLegend( #code for gdp legend
           layerId = "lormcp",
