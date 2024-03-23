@@ -48,7 +48,8 @@ output$map <- renderLeaflet({
     ) %>%
   
     setView(lng = -79.0, lat = 44.1, zoom = 10) %>%
-    addLogo("logoGBF_transp.png", src= "remote", width = 234)
+    addLogo("logo-transp.png", src= "remote", width = 127)
+  # addLogo("logoGBF_transp.png", src= "remote", width = 234)
 
 })
 
