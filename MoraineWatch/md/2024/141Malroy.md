@@ -1,12 +1,12 @@
 # Temporary Use Zoning By-Law coming before the City of Vaughan.
 
-**Location:** on Oak Ridges Moraine, 141 Maloy St (Keele & King Vaughan Rd)
+**Location:** on Oak Ridges Moraine, 141 Maloy St (Keele & King Vaughan Rd). Site is on the ORM (Natural Linkage and abuts Natural Core) and requested temporary parking lot for storage of vehicles. 
 
-**Concerns:** Site is on the ORM (Natural Linkage and abuts Natural Core) and requested temporary parking lot for storage of vehicles. [EXTRACT FROM COUNCIL MEETING MINUTES OF SEPTEMBER 28, 2022](https://pub-vaughan.escribemeetings.com/filestream.ashx?DocumentId=120756):
+**Concerns:** Precedent setting decision that would lead to municipalities approving temporary zoning use by-laws, that are not permitted on the ORMCA and lead to irreversible changes to natural heritage features intended to be protected by ORM land use designations. [From Council Meeting Minutes of September 28, 2022](https://pub-vaughan.escribemeetings.com/filestream.ashx?DocumentId=120756):
 
-> - The proposed temporary outside storage of 817 motor vehicles, including the temporary preparation and inspection of new motor vehicles as an accessory use is
-not a permitted use within the Natural Linkage Area designation in VOP 2010.
->- The Planning Act, requires that all planning decisions conform to Provincial Policies, including the policies of the Oak Ridges Moraine Conservation Plan. The proposed temporary use for the Subject Lands is not permitted by the VOP 2010. However, Policy 10.1.2.4 of the VOP provides that Zoning By-laws may allow the temporary use of land, building or structures provided the temporary uses meet 4 conditions.
+- Proposed temporary outside storage of 817 motor vehicles, including the temporary preparation and inspection of new motor vehicles as an accessory use.
+- The Planning Act, requires that all planning decisions conform to Provincial Policies, including the policies of the Oak Ridges Moraine Conservation Plan. Even if local Official Plan permit the approval of temporary use by-laws it does not mean that it gives authority to municipalities to give temporary-uses that are not in conformity with provincial legislation.
+- Temporary uses may cause permanent irreversible damage to natural heritage features on and off-site that are protected as Natural Linkage and Natural Core. This would undermine the purpose and intent of the ORMCA to restore the ecological integrity and protect hydrological features and functions.
 
 **Additional Notes:**
 
