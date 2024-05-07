@@ -114,6 +114,10 @@ observeEvent(input$map_click, {
       output$shape.info <- renderUI(shiny::includeMarkdown("md/2023/King-Bathurst.md"))
     } else if (i==9) {
       output$shape.info <- renderUI(shiny::includeMarkdown("md/2024/141Malroy.md"))
+    } else if (i==10) {
+      output$shape.info <- renderUI(shiny::includeMarkdown("md/2024/GoodwoodPit.md"))
+    } else if (i==11 | i==12) {
+      output$shape.info <- renderUI(shiny::includeMarkdown("md/2024/YRSWP.md"))
     } else {
       hide('panl')
       output$shape.info <- renderUI(shiny::includeMarkdown("md/blank.md"))
