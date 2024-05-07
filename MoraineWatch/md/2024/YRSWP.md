@@ -8,7 +8,7 @@ As required by the [Supporting Growth and Housing in York and Durham Regions Act
 
 **Location:** Multiple. See reports posted here: https://www.york.ca/newsroom/campaigns-projects/york-region-sewage-works-project
 
-![](YR_SewageWorksProject_Map1.png)
+*see additional map below*
 
 
 **Concerns** Leslie Street Trunk Sewer (excerpts from https://www.york.ca/media/116031):
@@ -26,3 +26,7 @@ As required by the [Supporting Growth and Housing in York and Durham Regions Act
 
 > "One key concern with trenchless construction relates to any sensitive infrastructure along or crossing the tunnel
 alignment."
+
+
+**York Region Sewage Works Project Map**
+![](YR_SewageWorksProject_Map1.png)
