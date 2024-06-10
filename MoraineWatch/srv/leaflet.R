@@ -118,6 +118,8 @@ observeEvent(input$map_click, {
       output$shape.info <- renderUI(shiny::includeMarkdown("md/2024/GoodwoodPit.md"))
     } else if (i==11 | i==12) {
       output$shape.info <- renderUI(shiny::includeMarkdown("md/2024/YRSWP.md"))
+    } else if (i==13) {
+      output$shape.info <- renderUI(shiny::includeMarkdown("md/2024/durham-kawartha-project-line.md"))
     } else {
       hide('panl')
       output$shape.info <- renderUI(shiny::includeMarkdown("md/blank.md"))
