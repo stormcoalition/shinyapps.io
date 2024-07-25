@@ -28,7 +28,8 @@ ui <- bootstrapPage(
 
 server <- function(input, output, session) {
   # showNotification("Map is loading...",type="message", duration=30)
-  source("srv/leaflet.R", local = TRUE)$value
+  source("srv/globals.R", local = TRUE)$value
+  source("srv/leaflet-render.R", local = TRUE)$value
   source("srv/getLatLongFromAddress.R", local = TRUE)$value
   # source("srv/mobile.R", local = TRUE)$value
   session$onSessionEnded(stopApp)

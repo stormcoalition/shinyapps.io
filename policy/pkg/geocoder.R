@@ -22,7 +22,3 @@ getLatLongFromAddress <- function(input.address, limits) {
   
   return(lat_longs)
 }
-
-
-
-# getLatLongFromAddress("21 Western Ave", c(43.5,44.3,-80.2,-77.9))

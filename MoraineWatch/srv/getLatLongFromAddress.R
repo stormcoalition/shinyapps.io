@@ -7,9 +7,10 @@ observeEvent(input$baddr, {
       print(paste0("result: ",lat_longs$latitude, " ", lat_longs$longitude))
 
       if(nrow(lat_longs)>0){
-        leafletProxy("map") %>%
+        leafletProxy("mapMW") %>%
           clearMarkers() %>% 
-          addMarkers(lng = lat_longs$longitude, lat = lat_longs$latitude)        
+          addMarkers(lng = lat_longs$longitude, lat = lat_longs$latitude) %>%
+          setView(lat_longs$longitude, lat_longs$latitude, zoom = 16)           
       } else {
         showNotification("Address not found. Please re-enter address (may need to be more specific).",type="warning")
       }

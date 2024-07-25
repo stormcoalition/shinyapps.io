@@ -20,7 +20,7 @@ output$mapMW <- renderLeaflet({
     
     addEasyButton(easyButton(
       icon="fa-crosshairs", title="Locate Me",
-      onClick=JS("function(btn, map){ map.locate({setView: true}); }"))) %>%
+      onClick=JS("function(btn, mapMW){ mapMW.locate({setView: true}); }"))) %>%
     
     addPolygons(
       data = ormcp,
@@ -60,7 +60,8 @@ output$mapMW <- renderLeaflet({
     ) %>% hideGroup("Show ORMCP Land use Designation") %>%
     
     setView(lng = -79.0, lat = 44.1, zoom = 10) %>%
-    addLogo("logo-transp.png", src= "remote", width = 127)
+    addLogo("https://raw.githubusercontent.com/stormcoalition/shinyapps.io/main/images/logo-transp.png", src= "remote", width = 127)
+    # addLogo("logo-transp.png", src= "remote", width = 127)
     # addLogo("logoGBF_transp.png", src= "remote", width = 234)
 })
 
@@ -83,7 +84,7 @@ clk <- reactiveValues(clickedShape=NULL)
 observeEvent(input$mapMW_shape_click, { clk$clickedShape <- input$mapMW_shape_click })
 
 observeEvent(input$mapMW_click, {
-  leafletProxy("map") %>% clearPopups()
+  leafletProxy("mapMW") %>% clearPopups()
   event <- input$mapMW_click
   if (is.null(event)) return()
   lat <- round(event$lat, 4)
@@ -115,7 +116,7 @@ observeEvent(input$mapMW_click, {
       output$shape.info <- renderUI(shiny::includeMarkdown("md/blank.md"))
     }
     
-    leafletProxy("map") %>%
+    leafletProxy("mapMW") %>%
       setView(lng = click$lng, lat = click$lat, zoom = 14) %>%
       addPopups(event$lng,event$lat,paste0('<b>',aoc$name[[idx]],'</b>', 
                                            "<br>Source: ", aoc$source[[idx]], '<a href="', aoc$link[[idx]], '" target="_blank" rel="noopener noreferrer"><i> read more...</i></a>',
@@ -123,7 +124,7 @@ observeEvent(input$mapMW_click, {
   } else {
     hide('panl')
     output$shape.info <- renderUI(shiny::includeMarkdown("md/blank.md"))
-    leafletProxy("map") %>% 
+    leafletProxy("mapMW") %>% 
       addPopups(event$lng,event$lat,paste0(lat, ',', lng, mwpopup(lat, lng)))
   }
   clk$clickedShape <- NULL
@@ -132,7 +133,7 @@ observeEvent(input$mapMW_click, {
 
 
 observe({
-  map <- leafletProxy("map") %>% clearControls()
+  map <- leafletProxy("mapMW") %>% clearControls()
   if (!is.null(input$mapMW_groups) ) {
     if (input$mapMW_groups == 'Show ORMCP Land use Designation') {
       map <- map %>%
