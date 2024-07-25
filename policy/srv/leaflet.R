@@ -1,15 +1,22 @@
 
-output$map <- renderLeaflet({
-  orm <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/Oak_Ridges_Moraine_(ORM)_Land_Use_Designation-dissolve.geojson")
-  grnblt <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/GREENBELT_DESIGNATION-simplified-2022.geojson")
-  bua <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/BUILT_UP_AREA-simplified.geojson")
-  lspp <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/LSPP-simplified.geojson")
+output$mapPolicy <- renderLeaflet({
+  
+  grnblt <- grnblt %>% filter(DESG_E != "Oak Ridges Moraine Conservation Plan")
+  grnbltPal <- colorFactor(
+    c('#C6D69E','#88CD66','#B4D69E','#798EF5','#C29ED6','#C29ED6'),
+    levels = c("Oak Ridges Moraine Conservation Plan",
+               "Protected Countryside",
+               "Niagara Escarpment Plan",
+               "Urban River Valley",
+               "Holland Marsh",
+               "Niagara Peninsula Tender Fruit and Grape Area"),
+    domain = grnblt$DESG_E
+  )
 
   leaflet() %>%
     
     addTiles(attribution = '<a href="https://stormcoalition.github.io" target="_blank" rel="noopener noreferrer"><b>STORM maps</b></a> | <a href="https://stormcoalition.github.io/sources.html" target="_blank" rel="noopener noreferrer"><b>Source Data</b></a> © <a href="https://www.stormcoalition.com/" target="_blank" rel="noopener noreferrer"><b>Save The Oak Ridges Moraine</b></a>') %>%
-    
-    addTiles() %>%
+    # addTiles("https://tile.oakridgeswater.ca/ORMbasemap/{z}/{x}/{y}") %>%
     
     # addMouseCoordinates() %>%
     
@@ -33,32 +40,33 @@ output$map <- renderLeaflet({
                 fillOpacity = 0.35, 
                 group="Built-up areas"
                 ) %>%
-
-    addPolygons(
-      data = grnblt,
-      color = "green",
-      stroke = FALSE,
-      weight = 3,
-      fillOpacity = .35,
-      group="Greenbelt",
-      label = "Greenbelt",
-      popup = '<a href="https://files.ontario.ca/greenbelt-plan-2017-en.pdf" target="_blank" rel="noopener noreferrer"><b>Greenbelt Plan (2017)</b></a>',
-      highlightOptions = highlightOptions(
-        opacity = 1, fillOpacity = .65, weight = 3, sendToBack = FALSE
-      )
-    ) %>%
-
+    
     addPolygons(
       data = lspp,
       color = "darkblue",
-      stroke = FALSE,
-      weight = 3,
-      fillOpacity = .35,
+      stroke = TRUE,
+      weight = 1,
+      fillOpacity = .15,
       group="Lake Simcoe Protection Plan",
       label = "Lake Simcoe Protection Plan",
       popup = '<a href="https://rescuelakesimcoe.org/wp-content/uploads/2021/02/Lake-Simcoe-Protection-Plan.pdf" target="_blank" rel="noopener noreferrer"><b>Lake Simcoe Protection Plan (2009)</b></a>',
       highlightOptions = highlightOptions(
-        opacity = 1, fillOpacity = .65, weight = 3, sendToBack = FALSE
+        opacity = 1, fillOpacity = .65, weight = 3, sendToBack = TRUE, bringToFront = TRUE
+      )
+    ) %>%
+    
+    addPolygons(
+      data = grnblt,
+      color = "darkgreen",
+      stroke = TRUE,
+      weight = 1,
+      fillColor = ~grnbltPal(DESG_E),
+      fillOpacity = .55,
+      group="Greenbelt",
+      label = ~paste0("Greenbelt: ",DESG_E),
+      popup = '<a href="https://files.ontario.ca/greenbelt-plan-2017-en.pdf" target="_blank" rel="noopener noreferrer"><b>Greenbelt Plan (2017)</b></a>',
+      highlightOptions = highlightOptions(
+        opacity = 1, fillOpacity = .85, weight = 3, sendToBack = FALSE
       )
     ) %>%
     
@@ -66,17 +74,17 @@ output$map <- renderLeaflet({
       data = orm,
       color = 'black',
       weight = 1,
-      fillColor = "darkorange",
-      fillOpacity = .35,
-      group="Oak Ridges Moraine Conservation Plan",
-      label = "Oak Ridges Moraine Conservation Plan",
+      fillColor = "#C6D69E",
+      fillOpacity = .55,
+      group="Oak Ridges Moraine Conservation Plan Area",
+      label = "Oak Ridges Moraine Conservation Plan Area",
       popup = '<a href="https://files.ontario.ca/oak-ridges-moraine-conservation-plan-2017.pdf" target="_blank" rel="noopener noreferrer"><b>Oak Ridges Moraine Conservation Plan (2017)</b></a>',
       highlightOptions = highlightOptions(
-        opacity = 1, fillOpacity = .65, weight = 5, sendToBack = FALSE
+        opacity = 1, fillOpacity = .85, weight = 5, sendToBack = FALSE
       )
-    ) %>%    
-    
-    setView(lng = -79.0, lat = 44.1, zoom = 8) %>%
+    ) %>%
+
+    setView(lng = -79.0, lat = 44.0, zoom = 9) %>%
     addLogo("logo-transp.png", src= "remote", width = 127)
     # addLogo("logoGBF_transp.png", src= "remote", width = 234) # %>%
 

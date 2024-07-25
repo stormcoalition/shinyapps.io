@@ -1,0 +1,124 @@
+---
+title: "Interactive Mapping Tutorial"
+author: "Save The Oak Ridges Moraine"
+output: 
+  flexdashboard::flex_dashboard:
+    storyboard: true
+    # theme: flatly
+    theme: sandstone
+    logo: www/logo-transp-small.png
+    social: menu
+    source: "https://github.com/stormcoalition/storyboard-mapping"
+runtime: shiny    
+---
+
+<!-- rsconnect::deployApp(account='stormcoalition',appName='mapstoryboard') -->
+
+```{r setup, include=FALSE}
+library(knitr)
+library(flexdashboard)
+library(sf)
+library(shiny)
+library(leaflet)
+library(leafem)
+library(shiny)
+library(shinyjs)
+library(geojsonio)
+library(dplyr)
+
+srcattr <- '<a href="https://stormcoalition.github.io/sources.html" target="_blank" rel="noopener noreferrer"><b>Data Sources</b></a> © <a href="https://www.stormcoalition.com/" target="_blank" rel="noopener noreferrer"><b>Save The Oak Ridges Moraine</b></a>'
+
+orm <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/Oak_Ridges_Moraine_(ORM)_Land_Use_Designation-dissolve.geojson",quiet=TRUE)
+grnblt <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/GREENBELT_DESIGNATION-wspecialtycrop-simplified-2023.geojson",quiet=TRUE)
+bua <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/BUILT_UP_AREA-simplified.geojson",quiet=TRUE)
+lspp <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/LSPP-simplified.geojson",quiet=TRUE)
+
+ormcp <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/Oak_Ridges_Moraine_(ORM)_Land_Use_Designation.geojson", quiet=TRUE)
+aoc <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/moraine-watch-aoc.geojson", quiet=TRUE)
+```
+
+
+### The Oak Ridges Moraine
+
+```{r orm, echo=FALSE, message=FALSE, warning=FALSE}
+leafletOutput("mapPolicy", height = "100vh")
+source("policy/srv/leaflet.R", local = TRUE)$value
+```
+
+***
+
+The **Oak Ridges Moraine** (ORM) is glacial formation that was created some 20,000 years ago. It is an area where a large portion of rain water and snowmelt recharges the groundwater system. The ORM is a reservoir, slowly releasing water to support the many river systems that flow north to Lake Simcoe and South to Lake Ontario. Its 160 km extent makes up a large part of the Green Belt Plan.
+
+STORM has created a number of interactive maps for the community to access planning policy, discover their natural surroundings, identify elected/public representation and report to STORM at any given location within the ORM landscape. This and the following maps are themed accordingly, to serve your needs.
+
+------------------------
+
+To begin, the map on the left shows the Provincial policy boundaries that affect the ORM. The buttons on the top will lead you the variety of mapping tools we have so far created. 
+
+[**Tips:**]{style="color:darkgreen"}
+
+- click within any boundary to gain access to planning documents
+
+
+
+### Save The Oak Ridges Moraine -- who is STORM?
+
+```{r storm, echo=FALSE, message=FALSE, warning=FALSE}
+leaflet() %>%
+  addTiles(attribution = srcattr) %>%
+  addTiles("https://tile.oakridgeswater.ca/ORMbasemap/{z}/{x}/{y}", options = providerTileOptions(attribution=" © Save The Oak Ridges Moraine")) %>%
+  
+  # setView(lng = -78.95, lat = 44.1, zoom = 10)
+  setView(lng = -79.0, lat = 44.0, zoom = 11) %>%
+  addLogo("basemap_legend.png", src= "local",  position = "bottomright", offset.x=10, offset.y=13,width=154, height=360)
+# here::here("images", "basemap_legend.png")
+```
+
+***
+
+![](images/STORM_logo.png)
+
+**S**ave **T**he **O**ak **R**idges **M**oraine (STORM) Coalition works collaboratively and has established relationships of mutual support with diverse groups and organizations. STORM participates in environmental land use planning, policy development and stewardship to safeguard the moraine from inappropriate development that has a negative impact.
+
+-------------------
+
+[**Tips:**]{style="color:darkgreen"}
+
+- Zoom in and put to explore the full character of the ORM and how the landscape intersects with community. As you zoom in, more detail is revealed!
+
+<!-- ![](fig/basemap_legend.png){width=65%} -->
+
+
+
+### Mapping Tools
+
+```{r tools, echo=FALSE, message=FALSE, warning=FALSE}
+
+leaflet() %>%
+  addTiles(attribution = srcattr) %>%
+  addTiles("https://tile.oakridgeswater.ca/ORMbasemap/{z}/{x}/{y}", options = providerTileOptions(attribution=" © Save The Oak Ridges Moraine")) %>%
+  
+  addMeasure(
+    position = "topleft",
+    primaryLengthUnit = "meters",
+    primaryAreaUnit = "hectares",
+    secondaryAreaUnit = "acres",
+    activeColor = "#3D535D",
+    completedColor = "#7D4479"
+  ) %>%
+
+  addEasyButton(easyButton(
+    icon="fa-crosshairs", title="Locate Me",
+    onClick=JS("function(btn, map){ map.locate({setView: true}); }"))
+  ) %>%
+  
+  # setView(lng = -78.95, lat = 44.1, zoom = 10)
+  setView(lng = -79.0, lat = 44.0, zoom = 11) %>%
+  addLogo("https://raw.githubusercontent.com/stormcoalition/shinyapps.io/main/ORMCA/www/basemap_legend.png", src= "remote",  position = "bottomright", offset.x=10, offset.y=13,width=154, height=360)
+```
+
+***
+
+With all of our maps, we provide a variety of tools to help users navigate the ORM.
+
+

@@ -17,7 +17,7 @@ output$map <- renderLeaflet({
     
     addTiles() %>%
 
-    addMouseCoordinates() %>%
+    # addMouseCoordinates() %>%
     
     addMeasure(
       position = "topleft",

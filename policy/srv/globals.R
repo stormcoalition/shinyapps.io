@@ -1,0 +1,4 @@
+orm <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/Oak_Ridges_Moraine_(ORM)_Land_Use_Designation-dissolve.geojson",quiet=TRUE)
+grnblt <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/GREENBELT_DESIGNATION-wspecialtycrop-simplified-2023.geojson",quiet=TRUE)
+bua <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/BUILT_UP_AREA-simplified.geojson",quiet=TRUE)
+lspp <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/LSPP-simplified.geojson",quiet=TRUE)

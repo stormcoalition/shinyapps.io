@@ -1,16 +1,6 @@
 
 
-aoc <<- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/moraine-watch-aoc.geojson")
-
-ormcp <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/Oak_Ridges_Moraine_(ORM)_Land_Use_Designation.geojson")
-
-ormcpPal <- colorFactor(
-  c('#7fc97f','#beaed4','#fdc086','#ffff99','#386cb0','#f0027f'),
-  domain = ormcp$LAND_USE_DESIGNATION
-)
-
-
-output$map <- renderLeaflet({
+output$mapMW <- renderLeaflet({
   hide('panl')
   leaflet(aoc) %>%
 
@@ -90,11 +80,11 @@ mwpopup <- function(lat,lng) {
 
 clk <- reactiveValues(clickedShape=NULL)
 
-observeEvent(input$map_shape_click, { clk$clickedShape <- input$map_shape_click })
+observeEvent(input$mapMW_shape_click, { clk$clickedShape <- input$mapMW_shape_click })
 
-observeEvent(input$map_click, {
+observeEvent(input$mapMW_click, {
   leafletProxy("map") %>% clearPopups()
-  event <- input$map_click
+  event <- input$mapMW_click
   if (is.null(event)) return()
   lat <- round(event$lat, 4)
   lng <- round(event$lng, 4)
@@ -143,8 +133,8 @@ observeEvent(input$map_click, {
 
 observe({
   map <- leafletProxy("map") %>% clearControls()
-  if (!is.null(input$map_groups) ) {
-    if (input$map_groups == 'Show ORMCP Land use Designation') {
+  if (!is.null(input$mapMW_groups) ) {
+    if (input$mapMW_groups == 'Show ORMCP Land use Designation') {
       map <- map %>%
         addLegend( #code for gdp legend
           layerId = "lormcp",

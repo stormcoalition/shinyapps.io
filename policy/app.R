@@ -11,10 +11,9 @@ library(tidygeocoder)
 source("pkg/geocoder.R", local=TRUE)
 
 ui <- bootstrapPage(
-  leafletOutput("map", height = "100vh"),
+  leafletOutput("mapPolicy", height = "100vh"),
   absolutePanel(id = 'legend', class = "panel panel-default", fixed = TRUE, width = 240,
                 draggable = FALSE, top = 10, left = "auto", right = 10, bottom = "auto",
-                h4("Legend"),
                 img(src="legend.png", align='right', width='100%'),
   ),
   absolutePanel(id = 'addrpanl',
@@ -27,6 +26,7 @@ ui <- bootstrapPage(
 
 server <- function(input, output, session) {
   # showNotification("Map is loading...",type="message", duration=30)
+  source("srv/globals.R", local = TRUE)$value
   source("srv/leaflet.R", local = TRUE)$value
   source("srv/getLatLongFromAddress.R", local = TRUE)$value
   # source("srv/mobile.R", local = TRUE)$value
