@@ -35,6 +35,7 @@ orm <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/Oa
 grnblt <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/GREENBELT_DESIGNATION-wspecialtycrop-simplified-2023.geojson",quiet=TRUE)
 bua <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/BUILT_UP_AREA-simplified.geojson",quiet=TRUE)
 lspp <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/LSPP-simplified.geojson",quiet=TRUE)
+gp <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/GGH-GrowthPlan.geojson",quiet=TRUE)
 
 ormcp <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/Oak_Ridges_Moraine_(ORM)_Land_Use_Designation.geojson", quiet=TRUE)
 
@@ -64,7 +65,7 @@ getLatLongFromAddress <- function(input.address, limits) {
 ```
 
 
-### **The Oak Ridges Moraine**
+### **The Oak Ridges Moraine** -- Greater Golden Horseshoe Policy Areas {data-commentary-width=420}
 
 ```{r orm, echo=FALSE, message=FALSE, warning=FALSE, out.width='100%'}
 source("policy/srv/leaflet.R", local = TRUE)$value
@@ -72,20 +73,60 @@ source("policy/srv/leaflet.R", local = TRUE)$value
 
 ***
 
-The **Oak Ridges Moraine** (ORM) is glacial formation that was created some 20,000 years ago. It is an area where a large portion of rain water and snowmelt recharges the groundwater system. The ORM is a reservoir, slowly releasing water to support the many river systems that flow north to Lake Simcoe and South to Lake Ontario. Its 160 km extent makes up a large part of the Green Belt Plan.
+The **Oak Ridges Moraine** (ORM) is a glacial formation created some 13,000 years ago. It is one of Ontario’s largest moraines, spanning 160 kilometres from the Niagara Escarpment to the Trent River system. The moraine acts like a giant sponge absorbing most of the rainwater and snowmelt, recharging and slowly releasing water to support the many river systems that flow north to Lakes Simcoe, Scugog and Rice and south to Lake Ontario. At 190,000 hectares, it is called the “rain barrel of southern Ontario” and makes up a large part of the Greenbelt Plan Area. STORM has created a number of interactive maps to de-mystify and help explain land use planning on the Oak Ridges Moraine and Greenbelt and for community members to discover their natural surroundings, identify elected/public representation and report to STORM at any given location within the ORM landscape. This and the following maps are themed accordingly, to serve your needs.
 
 STORM has created a number of interactive maps for the community to access planning policy, discover their natural surroundings, identify elected/public representation and report to STORM at any given location within the ORM landscape. This and the following maps are themed accordingly, to serve your needs.
 
 ------------------------
 
-To begin, the map on the left shows the Provincial policy boundaries that affect the ORM. The buttons on the top will lead you the variety of mapping tools we have so far created. 
+To begin, the map on the left shows the Provincial policy boundaries in the Greater Golden Horseshoe.
+
 
 [**Tips:**]{style="color:darkgreen"}
 
-- click within any boundary to gain access to planning documents
+- Scroll around to see how the relationships between the different provincial plans and then click within any boundary to link to the different planning documents
 
 
 
+
+
+### **Oak Ridges Moraine Conservation Plan:** Land Use Designations {data-commentary-width=500}
+
+```{r ormcp, echo=FALSE, message=FALSE, warning=FALSE, out.width='100%'}
+source("ORMCA/srv/leaflet.R", local = TRUE)$value
+```
+
+***
+
+> STORM's years of experience and a well-developed network of local and regional contacts were critical to the campaign that saved (legislatively) the Oak Ridges Moraine (ORM). 
+
+In 2001, the Ontario Legislature unanimously enacted the Oak Ridges Moraine Conservation Act and in 2002 the province passed the Oak Ridges Moraine Conservation Plan (ORMCP). [**Click here to read the ORMCP (2017)**](https://files.ontario.ca/oak-ridges-moraine-conservation-plan-2017.pdf).
+
+The Plan divides the Moraine into four land use designations:
+
+-   **Natural Core Areas** (38% of the Moraine)
+
+-   **Natural Linkage Areas** (24% of the Moraine)
+
+-   **Countryside Areas** (30% of the Moraine)
+
+-   **Settlement Areas** (8% of the Moraine)
+
+The ORMCP focuses on protecting headwater areas, watersheds and groundwater features and functions, as well as forests, wetlands and farmland, and is the jumping-off point for "smart growth" across Ontario.
+
+Learn more about why conservation matters on the Moraine in [Episode 9](https://www.youtube.com/watch?v=ueool1sVE_I) of STORM's video series.
+
+---------------------------------
+
+You can use the map to explore the land use designations on the moraine.
+
+[**Tips:**]{style="color:darkgreen"}
+
+- click within any boundary to gain insight into each land use designation
+- hide land use designation layer using the check box at the bottom-right
+
+
+![](images/ORMCP-legend.png)
 
 
 
@@ -105,13 +146,15 @@ leaflet() %>%
 
 ![](images/STORM_logo.png)
 
-**S**ave **T**he **O**ak **R**idges **M**oraine (STORM) Coalition works collaboratively and has established relationships of mutual support with diverse groups and organizations. STORM participates in environmental land use planning, policy development and stewardship to safeguard the moraine from inappropriate development that has a negative impact.
+**S**ave **T**he **O**ak **R**idges **M**oraine (STORM) Coalition works collaboratively and has established relationships of mutual support with diverse groups and organizations. STORM participates in environmental land use planning, policy development and stewardship to safeguard the moraine from inappropriate development.
+
+Moraine Watch is a tool developed by STORM as a way for people to become "eyes on the Moraine and adjacent Greenbelt lands" by sharing information about  an activity that is of concern, or a whiteboard announcing a development application or a particularly interesting viewscape.
 
 -------------------
 
 [**Tips:**]{style="color:darkgreen"}
 
-- Zoom in and put to explore the full character of the ORM and how the landscape intersects with community. As you zoom in, more detail is revealed!
+- Zoom in and out to explore the full character of the ORM and how the landscape intersects with community. As you zoom in, more detail is revealed!
 
 <!-- ![](fig/basemap_legend.png){width=65%} -->
 
@@ -233,43 +276,6 @@ Use this to enter an address to be located on the map. It is important that the 
 
 
 
-
-### **Oak Ridges Moraine Conservation Plan:** Land Use Designations {data-commentary-width=400}
-
-```{r ormcp, echo=FALSE, message=FALSE, warning=FALSE, out.width='100%'}
-source("ORMCA/srv/leaflet.R", local = TRUE)$value
-```
-
-***
-
-> STORM's years of experience and a well-developed network of local and regional contacts were critical to the campaign that saved (legislatively) the Oak Ridges Moraine (ORM). 
-
-In 2001, the Ontario Legislature unanimously enacted the Oak Ridges Moraine Conservation Act and in 2002 the province passed the Oak Ridges Moraine Conservation Plan (ORMCP). [**Click here to read the ORMCP (2017)**](https://files.ontario.ca/oak-ridges-moraine-conservation-plan-2017.pdf).
-
-The Plan divides the Moraine into four land use designations:
-
--   **Natural Core Areas** (38% of the Moraine)
-
--   **Natural Linkage Areas** (24% of the Moraine)
-
--   **Countryside Areas** (30% of the Moraine)
-
--   **Settlement Areas** (8% of the Moraine)
-
-The ORMCP focuses on protecting headwater areas, watersheds and groundwater features and functions, as well as forests, wetlands and farmland, and is the jumping-off point for "smart growth" across Ontario.
-
-Learn more about why conservation matters on the Moraine in [Episode 9](https://www.youtube.com/watch?v=ueool1sVE_I) of STORM's video series.
-
----------------------------------
-
-You can use the map to explore the land use designations on the moraine.
-
-[**Tips:**]{style="color:darkgreen"}
-
-- click within any boundary to gain insight into each land use designation
-- hide land use designation layer using the check box at the bottom-right
-
-
 ### **Jurisdictions** within the Oak Ridges Moraine
 
 ```{r jurisd, echo=FALSE, message=FALSE, warning=FALSE, out.width='100%'}
@@ -278,13 +284,14 @@ source("jurisdiction/srv/leaflet.R", local = TRUE)$value
 
 ***
 
-The Jurisdictional map is used to help users identify which authority (e.g., Municipality, MPP and/or Conservation Authority) to be contacted given their particular location within the ORM.
+The Jurisdictional map is used to help users identify which office, i.e., municipality, provincial riding and Member of Provincial Parliament (MPP) and/or conservation authority, should be contacted about a particular concern.
 
 -------------------------------
 
 [**Tips:**]{style="color:darkgreen"}
 
 - click within any riding to reveal the contact info for the local Member of Provincial Parliament (MPP)
+- click within any municipality or conservation authority to link to their website
 - switch layers using the radio button in the top right corner
 
 
@@ -414,7 +421,9 @@ observeEvent(input$mapMW_click, {
 
 > Using geographic information systems (GIS) mapping tools, STORM harnesses the power of community groups and concerned citizens.
 
-The Moraine Watch mapping tool provides an interactive resource to view and report areas of development that are monitored by STORM's Moraine Watch Program.
+<!-- The Moraine Watch mapping tool provides an interactive resource to view and report areas of development that are monitored by STORM's Moraine Watch Program. -->
+
+This mapping tool is designed to assist the Moraine Watch Program, providing an interactive resource to citizens concerned with land use changes on the Oak Ridges Moraine. Concerns about development can be reported directly by clicking on an area of concern on the map and selecting the "Submit Watch" link. Users are redirected to an email where they can detail their concerns about development on the Moraine. If citizens would like to search for a specific location they can use the search bar by typing in the address of interest.
 
 On this map you can see:
 
@@ -438,7 +447,9 @@ Are you concerned with land use changes occurring atop the ORM? You can report y
 
 4.  Click ["Submit Watch"]{style="color:blue"} to send an email detailing your concerns about development on the Oak Ridges Moraine.
 
+<center>
 ![](images/btn-submit.png)
+</center>
 
 You can also submit a development concern by visiting the [**Moraine Watch Map**](https://stormcoalition.shinyapps.io/morainewatch/) on our website.
 

@@ -14,7 +14,7 @@ output$map <- renderLeaflet({
     addTiles() %>%
     addTiles("https://tile.oakridgeswater.ca/ORMbasemap/{z}/{x}/{y}", options = providerTileOptions(attribution=" © Save The Oak Ridges Moraine")) %>%
 
-    addMouseCoordinates() %>%
+    # addMouseCoordinates() %>%
     
     addMeasure(
       position = "topleft",
@@ -27,7 +27,8 @@ output$map <- renderLeaflet({
   
     addEasyButton(easyButton(
       icon="fa-crosshairs", title="Locate Me",
-      onClick=JS("function(btn, map){ map.locate({setView: true}); }"))) %>%
+      # onClick=JS("function(btn, map){ map.locate({setView: true}); }"))) %>%
+      onClick=JS("function(btn, map){map.locate({setView: true}).on('locationfound', function(e){Shiny.setInputValue('locate_easyButton', [e.longitude,e.latitude] )})}"))) %>%
     
     addPolygons(
       data = pits,
@@ -62,4 +63,12 @@ observe({
   lat <- round(event$lat, 4)
   lng <- round(event$lng, 4)
   leafletProxy("map") %>% addPopups(event$lng,event$lat,paste0(lat, ',', lng))
+})
+
+observeEvent(input$locate_easyButton, {
+  cxy <- input$locate_easyButton
+  leafletProxy("map") %>%
+    clearGroup('locate') %>%
+    addCircleMarkers(lng=cxy[1],lat=cxy[2],
+                     group = 'locate')
 })

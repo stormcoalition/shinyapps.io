@@ -24,7 +24,8 @@ leaflet() %>%
 
   addEasyButton(easyButton(
     icon="fa-crosshairs", title="Locate Me",
-    onClick=JS("function(btn, map){ map.locate({setView: true}); }"))) %>%
+    # onClick=JS("function(btn, map){ map.locate({setView: true}); }"))) %>%
+    onClick=JS("function(btn, map){map.locate({setView: true}).on('locationfound', function(e){Shiny.setInputValue('locate_easyButton', [e.longitude,e.latitude] )})}"))) %>%
 
   addPolygons(
     data = ormcp,

@@ -20,7 +20,8 @@ output$mapMW <- renderLeaflet({
     
     addEasyButton(easyButton(
       icon="fa-crosshairs", title="Locate Me",
-      onClick=JS("function(btn, mapMW){ mapMW.locate({setView: true}); }"))) %>%
+      # onClick=JS("function(btn, map){map.locate({setView: true}); }"))) %>%
+      onClick=JS("function(btn, map){map.locate({setView: true}).on('locationfound', function(e){Shiny.setInputValue('locate_easyButton', [e.longitude,e.latitude] )})}"))) %>%
     
     addPolygons(
       data = ormcp,
@@ -149,4 +150,13 @@ observe({
         )
     }
   }
+})
+
+
+observeEvent(input$locate_easyButton, {
+  cxy <- input$locate_easyButton
+  leafletProxy("mapMW") %>%
+    clearGroup('locate') %>%
+    addCircleMarkers(lng=cxy[1],lat=cxy[2],
+                     group = 'locate')
 })

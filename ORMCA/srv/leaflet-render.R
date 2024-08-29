@@ -14,7 +14,8 @@ observe({
 observe({
   map <- leafletProxy("map") %>% clearControls()
   if (!is.null(input$map_groups) ) {
-    if (input$map_groups == 'Show ORMCP Land use Designation') {
+    print(input$map_groups)
+    if ('Show ORMCP Land use Designation' %in% input$map_groups) {
       map <- map %>%
         addLegend( #code for gdp legend
           layerId = "lormcp",
@@ -28,4 +29,12 @@ observe({
         )
     }
   }
+})
+
+observeEvent(input$locate_easyButton, {
+  cxy <- input$locate_easyButton
+  leafletProxy("map") %>%
+    clearGroup('locate') %>%
+    addCircleMarkers(lng=cxy[1],lat=cxy[2],
+                     group = 'locate')
 })

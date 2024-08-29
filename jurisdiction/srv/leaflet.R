@@ -16,7 +16,8 @@ leaflet() %>%
 
   addEasyButton(easyButton(
     icon="fa-crosshairs", title="Locate Me",
-    onClick=JS("function(btn, map){ map.locate({setView: true}); }"))) %>%
+    # onClick=JS("function(btn, map){ map.locate({setView: true}); }"))) %>%
+    onClick=JS("function(btn, map){map.locate({setView: true}).on('locationfound', function(e){Shiny.setInputValue('locate_easyButton', [e.longitude,e.latitude] )})}"))) %>%
   
   addPolygons(data = orm, color = 'black', weight=1, fillColor  = "darkorange") %>%
 
@@ -28,7 +29,9 @@ leaflet() %>%
     group="Conservation Authorities",
     label = ~LEGAL_NAME,
     popup = ~paste0(
-              '<b>', LEGAL_NAME,"</b>"
+              '<b>', LEGAL_NAME,"</b>",
+              '<br>website: <a href="',URL,'">',URL,'</a>',
+              '<br>telephone: ', Telephone
               ),        
     highlightOptions = highlightOptions(
       opacity = 1, fillOpacity = .65, weight = 5, sendToBack = FALSE
@@ -44,7 +47,9 @@ leaflet() %>%
     group="Municipalities",
     label = ~MUN_NAME,
     popup = ~paste0(
-              '<b>', MUN_NAME,"</b>"
+              '<b>', MUN_NAME,"</b>",
+              '<br>website: <a href="',URL,'">',URL,'</a>',
+              '<br>telephone: ', Telephone
               ),    
     highlightOptions = highlightOptions(
       opacity = 1, fillOpacity = .45, weight = 5, sendToBack = FALSE

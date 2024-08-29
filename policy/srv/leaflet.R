@@ -29,7 +29,8 @@ leaflet() %>%
 
   addEasyButton(easyButton(
     icon="fa-crosshairs", title="Locate Me",
-    onClick=JS("function(btn, mapPolicy){ mapPolicy.locate({setView: true}); }"))) %>%
+    # onClick=JS("function(btn, mapPolicy){ mapPolicy.locate({setView: true}); }"))) %>%
+    onClick=JS("function(btn, map){map.locate({setView: true}).on('locationfound', function(e){Shiny.setInputValue('locate_easyButton', [e.longitude,e.latitude] )})}"))) %>%
   
   addPolygons(data = bua, 
               weight = 3, 
@@ -38,14 +39,14 @@ leaflet() %>%
               fillOpacity = 0.35, 
               group="Built-up areas"
               ) %>%
-  
+    
   addPolygons(
     data = lspp,
     color = "darkblue",
     stroke = TRUE,
     weight = 1,
     fillOpacity = .15,
-    group="Lake Simcoe Protection Plan",
+    group = "Lake Simcoe Protection Plan",
     label = "Lake Simcoe Protection Plan",
     popup = '<a href="https://rescuelakesimcoe.org/wp-content/uploads/2021/02/Lake-Simcoe-Protection-Plan.pdf" target="_blank" rel="noopener noreferrer"><b>Lake Simcoe Protection Plan (2009)</b></a>',
     highlightOptions = highlightOptions(
@@ -54,13 +55,29 @@ leaflet() %>%
   ) %>%
   
   addPolygons(
+    data = gp,
+    color = "black",
+    stroke = TRUE,
+    weight = 1,
+    opacity = .7,
+    fillColor = "wheat",
+    fillOpacity = .35,
+    group = "Greater Golden Horseshoe area Growth Plan",
+    label = "Greater Golden Horseshoe area Growth Plan",
+    popup = '<a href="https://files.ontario.ca/mmah-place-to-grow-office-consolidation-en-2020-08-28.pdf" target="_blank" rel="noopener noreferrer"><b>A Place to Grow: Growth Plan for the Greater Golden Horseshoe (2020)</b></a>',
+    highlightOptions = highlightOptions(
+      opacity = 1, fillOpacity = .65, weight = 1, sendToBack = TRUE, bringToFront = TRUE
+    )
+  ) %>%  
+  
+  addPolygons(
     data = grnblt,
     color = "darkgreen",
     stroke = TRUE,
     weight = 1,
     fillColor = ~grnbltPal(DESG_E),
     fillOpacity = .55,
-    group="Greenbelt",
+    group = "Greenbelt",
     label = ~paste0("Greenbelt: ",DESG_E),
     popup = '<a href="https://files.ontario.ca/greenbelt-plan-2017-en.pdf" target="_blank" rel="noopener noreferrer"><b>Greenbelt Plan (2017)</b></a>',
     highlightOptions = highlightOptions(
@@ -74,7 +91,7 @@ leaflet() %>%
     weight = 1,
     fillColor = "#C6D69E",
     fillOpacity = .55,
-    group="Oak Ridges Moraine Conservation Plan Area",
+    group = "Oak Ridges Moraine Conservation Plan Area",
     label = "Oak Ridges Moraine Conservation Plan Area",
     popup = '<a href="https://files.ontario.ca/oak-ridges-moraine-conservation-plan-2017.pdf" target="_blank" rel="noopener noreferrer"><b>Oak Ridges Moraine Conservation Plan (2017)</b></a>',
     highlightOptions = highlightOptions(
@@ -82,7 +99,7 @@ leaflet() %>%
     )
   ) %>%
 
-  setView(lng = -79.0, lat = 44.0, zoom = 9) %>%
+  setView(lng = -79.0, lat = 44.0, zoom = 8) %>%
   addLogo("https://raw.githubusercontent.com/stormcoalition/shinyapps.io/main/images/logo-transp.png", src= "remote", width = 127)
   # addLogo("logo-transp.png", src= "remote", width = 127)
   # addLogo("logoGBF_transp.png", src= "remote", width = 234) # %>%
