@@ -47,6 +47,12 @@ munis@polygons <- munis@polygons[neword]
 munis@plotOrder <- neword
 munis@data <- munis@data %>% arrange(-area)
 
+pits <- read_sf("https://raw.githubusercontent.com/stormcoalition/geojson/main/AGGSITE_AUTHORIZED_STORM.geojson", quiet=TRUE)
+till <- read_sf("https://raw.githubusercontent.com/stormcoalition/geojson/main/SOLRIS-tilled-lands.geojson", quiet=TRUE)
+peat <- read_sf("https://raw.githubusercontent.com/stormcoalition/geojson/main/SOLRIS-peat-topsoil-extraction.geojson", quiet=TRUE)
+plnt <- read_sf("https://raw.githubusercontent.com/stormcoalition/geojson/main/SOLRIS-plantations-trees-cultivated.geojson", quiet=TRUE)
+wwis <- read_sf("https://raw.githubusercontent.com/stormcoalition/geojson/main/WWIS_STORM.geojson", quiet=TRUE)
+
 aoc <- st_read("https://raw.githubusercontent.com/stormcoalition/geojson/main/moraine-watch-aoc.geojson", quiet=TRUE)
 
 basemaplegend <- "https://raw.githubusercontent.com/stormcoalition/shinyapps.io/main/images/basemap_legend.png"
@@ -291,8 +297,43 @@ The Jurisdictional map is used to help users identify which office, i.e., munici
 [**Tips:**]{style="color:darkgreen"}
 
 - click within any riding to reveal the contact info for the local Member of Provincial Parliament (MPP)
-- click within any municipality or conservation authority to link to their website
+- click within any municipality or conservation authority to link to their website and contact info
 - switch layers using the radio button in the top right corner
+
+
+
+
+
+
+
+### **Natural Resources**
+
+```{r resourc, echo=FALSE, message=FALSE, warning=FALSE, out.width='100%'}
+pitsPal <- colorFactor(
+  c('#e67e8c','#f0027f','#beaed4','grey40'),
+  domain = pits$STATUS
+)
+source("resource/srv/leaflet.R", local = TRUE)$value
+```
+
+***
+
+The Natural Resources map is used to identify resource extraction and agricultural practices occurring on the Oak Ridges Moraine. Practices include:
+
+1. Aggregate operations (both active and inactive)
+1. Agricultural fields managed as continuous annual row crops
+1. Peat/Topsoil extraction
+1. Plantations/Tree Cultivation
+1. Well records
+
+-------------------------------
+
+[**Tips:**]{style="color:darkgreen"}
+
+- show/hide layers using the check boxes in the bottom right corner
+- hover and click layer objects to reveal more details
+- MECP paper well records can be accessed by clicking a well location
+
 
 
 
@@ -367,7 +408,9 @@ output$mapMW <- renderLeaflet({
 })
 
 mwpopup <- function(lat,lng) {
-  paste0('<br><a href="mailto:test@example.com?subject=MORAINE WATCH [',lat,',',lng,']',
+  paste0('<br><a href="https://docs.google.com/forms/d/e/1FAIpQLSc2vdJSsAJuwqtx1KXNak-dR_0nQVwza96SW4laxJM8qqyNwA/viewform?usp=pp_url&entry.597103671=[',lat,',+',lng,']"',
+         '><b>Submit Watch--online form</b></a>',
+         '<br><a href="mailto:contact@stormcoalition.com?subject=MORAINE WATCH [',lat,',',lng,']',
          '&body=What is the issue that you are concerned about?%0D%0A%0D%0A%0D%0A%0D%0A',
          'Where? (so we know where the issue is):%0D%0A',
          '  Region, Municipality, Town:%0D%0A',
@@ -376,7 +419,7 @@ mwpopup <- function(lat,lng) {
          'Why are you concerned?:%0D%0A%0D%0A%0D%0A%0D%0A',
          'When? (so we have an idea of how long has the issue been going on):%0D%0A%0D%0A%0D%0A%0D%0A',
          'Additional Comments/Details (please attach photos if possible):%0D%0A%0D%0A"',
-         '><b>Submit Watch</b></a>')
+         '>(alternatively, submit by email)</a>')
 }
 
 observeEvent(input$mapMW_click, {
@@ -410,7 +453,7 @@ observeEvent(input$mapMW_click, {
                                            "<br>Date submitted: ", aoc$date_recorded[[idx]]))
   } else {
     leafletProxy("mapMW") %>% 
-      addPopups(event$lng,event$lat,paste0(lat, ',', lng, mwpopup(lat, lng)))
+      addPopups(event$lng,event$lat,paste0('Coordinates: ', lat, ',', lng, mwpopup(lat, lng)))
   }
   clk$clickedShape <- NULL
 })

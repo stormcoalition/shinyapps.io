@@ -68,7 +68,9 @@ output$mapMW <- renderLeaflet({
 
 
 mwpopup <- function(lat,lng) {
-  paste0('<br><a href="mailto:test@example.com?subject=MORAINE WATCH [',lat,',',lng,']',
+  paste0('<br><a href="https://docs.google.com/forms/d/e/1FAIpQLSc2vdJSsAJuwqtx1KXNak-dR_0nQVwza96SW4laxJM8qqyNwA/viewform?usp=pp_url&entry.597103671=[',lat,',+',lng,']"',
+         '><b>Submit Watch--online form</b></a>',
+         '<br><a href="mailto:contact@stormcoalition.com?subject=MORAINE WATCH [',lat,',',lng,']',
          '&body=What is the issue that you are concerned about?%0D%0A%0D%0A%0D%0A%0D%0A',
          'Where? (so we know where the issue is):%0D%0A',
          '  Region, Municipality, Town:%0D%0A',
@@ -77,7 +79,7 @@ mwpopup <- function(lat,lng) {
          'Why are you concerned?:%0D%0A%0D%0A%0D%0A%0D%0A',
          'When? (so we have an idea of how long has the issue been going on):%0D%0A%0D%0A%0D%0A%0D%0A',
          'Additional Comments/Details (please attach photos if possible):%0D%0A%0D%0A"',
-         '><b>Submit Watch</b></a>')
+         '>(alternatively, submit by email)</a>')
 }
 
 clk <- reactiveValues(clickedShape=NULL)
@@ -126,7 +128,7 @@ observeEvent(input$mapMW_click, {
     hide('panl')
     output$shape.info <- renderUI(shiny::includeMarkdown("md/blank.md"))
     leafletProxy("mapMW") %>% 
-      addPopups(event$lng,event$lat,paste0(lat, ',', lng, mwpopup(lat, lng)))
+      addPopups(event$lng,event$lat,paste0('Coordinates: ', lat, ',', lng, mwpopup(lat, lng)))
   }
   clk$clickedShape <- NULL
 })
