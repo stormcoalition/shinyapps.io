@@ -6,7 +6,7 @@
 
 <!-- ![](15630-HWY-27-Soil-Dumping-wetland.png) -->
 
-<a href="https://raw.githubusercontent.com/stormcoalition/shinyapps.io/refs/heads/main/MoraineWatch/md/2024/15630-HWY-27-Soil-Dumping-wetland.png"><img src="15630-HWY-27-Soil-Dumping-wetland.png" width="380"></a>
+<a href="https://raw.githubusercontent.com/stormcoalition/shinyapps.io/refs/heads/main/MoraineWatch/md/2024/15630-HWY-27-Soil-Dumping-wetland.pdf"><img src="15630-HWY-27-Soil-Dumping-wetland.png" width="380"></a>
 
 <br>
 
