@@ -43,7 +43,7 @@ output$mapMW <- renderLeaflet({
     addPolygons(
       layerId = ~id,
       color = "red",
-      weight = 3,
+      weight = 5,
       # fillColor = ~ormcpPal(LAND_USE_DESIGNATION),
       opacity = .5, 
       # group="ORM Land use",
@@ -114,6 +114,10 @@ observeEvent(input$mapMW_click, {
       output$shape.info <- renderUI(shiny::includeMarkdown("md/2024/YRSWP.md"))
     } else if (i==13) {
       output$shape.info <- renderUI(shiny::includeMarkdown("md/2024/durham-kawartha-project-line.md"))
+    } else if (i==14) {
+      output$shape.info <- renderUI(shiny::includeMarkdown("md/2024/15630-HWY-27-Soil-Dumping.md"))     
+    } else if (i==15) {
+      output$shape.info <- renderUI(shiny::includeMarkdown("md/2024/120-Lake-Woods-Drive.md"))     
     } else {
       hide('panl')
       output$shape.info <- renderUI(shiny::includeMarkdown("md/blank.md"))

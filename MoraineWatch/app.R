@@ -7,9 +7,9 @@ library(leafem)
 library(dplyr, warn.conflicts = FALSE)
 library(sf)
 library(geojsonio)
+library(tidygeocoder)
 library(markdown)
 # library(googlesheets4)
-# library(tidygeocoder)
 
 
 source("func/geocoder.R", local=TRUE)
