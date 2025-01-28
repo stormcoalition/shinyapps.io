@@ -63,8 +63,9 @@ leaflet() %>%
     fillColor = "wheat",
     fillOpacity = .35,
     group = "Greater Golden Horseshoe area Growth Plan",
-    label = "Greater Golden Horseshoe area Growth Plan",
-    popup = '<a href="https://files.ontario.ca/mmah-place-to-grow-office-consolidation-en-2020-08-28.pdf" target="_blank" rel="noopener noreferrer"><b>A Place to Grow: Growth Plan for the Greater Golden Horseshoe (2020)</b></a>',
+    label = "Greater Golden Horseshoe area Growth Plan (now Sunset)",
+    popup = paste0('<a href="https://files.ontario.ca/mmah-place-to-grow-office-consolidation-en-2020-08-28.pdf" target="_blank" rel="noopener noreferrer"><b>A Place to Grow: Growth Plan for the Greater Golden Horseshoe (2020)</b></a>',
+                   '<br><a href="https://www.ontario.ca/document/place-grow-growth-plan-greater-golden-horseshoe" target="_blank" rel="noopener noreferrer"><b>(noe sunset)</b></a>'),
     highlightOptions = highlightOptions(
       opacity = 1, fillOpacity = .65, weight = 1, sendToBack = TRUE, bringToFront = TRUE
     )
